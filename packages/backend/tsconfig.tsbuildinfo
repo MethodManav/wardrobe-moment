@@ -1,1 +1,0 @@
-{"root":["./src/index.ts","./src/server.ts","./src/core/baseroute.ts","./src/core/baseservice.ts","./src/database/connection.ts"],"version":"5.9.3"}
