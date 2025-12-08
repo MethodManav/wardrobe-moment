@@ -1,5 +1,5 @@
 import express from 'express'
-import { ErrorHandler } from './error';
+import { AppError, ErrorHandler } from './error';
 
 export class createHTTPServer {
   app: express.Application;
@@ -17,8 +17,8 @@ export class createHTTPServer {
   }
 
   private setupErrorHandlers() {
-    this.app.use("*", ErrorHandler.notFound());
-    this.app.use(ErrorHandler.handle());
+    // this.app.use(ErrorHandler.notFound);
+    this.app.use(ErrorHandler.handle);
   }
 
   private setupGlobalErrorHandlers() {
@@ -34,7 +34,7 @@ export class createHTTPServer {
 
   static app() {
     if (!this.app) {
-      throw new Error("Server not started yet");
+     throw new AppError('Express app not initialized', 500);
     }
     return this.app;
   }
