@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { logger } from '../logs';
 export async function sendResponse(
     res: Response,
     data: ILooseObject,
@@ -6,13 +7,18 @@ export async function sendResponse(
     success: boolean,
     code = 200,
 ): Promise<void> {
-    const responseObj: IResponse = {
-        data: data,
-        message: message ?? 'undefined',
-        success: success,
-    };
+    try {
+        const responseObj: IResponse = {
+            data: data,
+            message: message ?? 'undefined',
+            success: success,
+        };
 
-    res.status(code).json(responseObj);
+        res.status(code).json(responseObj);
+    } catch (error) {
+        logger.error('Error sending response:', error);
+    }
+
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

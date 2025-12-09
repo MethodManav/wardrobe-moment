@@ -1,3 +1,4 @@
+import { Document } from 'mongoose';
 import { z } from 'zod';
 const RentalUserValidationSchema = z.object({
     fullName: z.string().min(2).max(100),
@@ -10,4 +11,5 @@ const RentalUserValidationSchema = z.object({
 
 const RentalSignupValidationSchema = RentalUserValidationSchema.omit({ rentalHistory: true });
 type TRentalUser = z.infer<typeof RentalUserValidationSchema>;
-export { TRentalUser, RentalSignupValidationSchema }
+interface IRentalUserDocument extends Document, TRentalUser {}
+export { TRentalUser, RentalSignupValidationSchema, IRentalUserDocument }

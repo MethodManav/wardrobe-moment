@@ -1,3 +1,4 @@
+import { logger } from "../logs";
 import { RentalSignupValidationSchema } from "../types/RentalUserTypes";
 import { ResponseCode } from "../types/ResponseTypes";
 import { sendResponse } from "../util/sendReponse";
@@ -14,7 +15,22 @@ export class RentalUserParser {
                 sendResponse(res, {}, "Validation Failed", false, ResponseCode.BAD_REQUEST);
             }
         } catch (error) {
-            console.error('Validation error:', error);
+            logger.error('Validation error:', error);
+            next(error);
+        }
+    }
+    static async LoginValidation(req: Request, res: Response, next: NextFunction) {
+        try {
+            const parsedData = RentalSignupValidationSchema.pick({ email: true, password: true }).safeParse(req.body);
+            if (parsedData.success) {
+                req.body = parsedData.data;
+                next();
+            } else {
+                logger.error('Validation error details:', parsedData.error);
+                sendResponse(res, {}, "Validation Failed", false, ResponseCode.BAD_REQUEST);
+            }
+        } catch (error) {
+            logger.error('Validation error:', error);
             next(error);
         }
     }
