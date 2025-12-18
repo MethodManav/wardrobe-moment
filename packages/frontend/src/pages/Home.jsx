@@ -1,10 +1,10 @@
-import React, { useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import products from "../data/products";
 import ProductCard from "../components/ProductCard";
 
 // --- helper: small picks from products -----------------
-const getFirst = (arr, fallback = null) => (arr && arr.length ? arr[0] : fallback);
+const getFirst = (arr, fallback = null) =>
+  arr && arr.length ? arr[0] : fallback;
 
 const Home = () => {
   const navigate = useNavigate();
@@ -13,7 +13,9 @@ const Home = () => {
   const womenHighlight =
     getFirst(products.filter((p) => p.category === "women")) || products[0];
   const menHighlight =
-    getFirst(products.filter((p) => p.category === "men")) || products[1] || products[0];
+    getFirst(products.filter((p) => p.category === "men")) ||
+    products[1] ||
+    products[0];
 
   const flashRentals = products.slice(0, 4);
   const newArrivals = products.slice(4, 8);
@@ -26,60 +28,6 @@ const Home = () => {
         p.type === "traditional"
     )
     .slice(0, 4);
-
-  // --- store slider data --------------------------------
-  const stores = [
-    {
-      id: "blr-forum",
-      city: "Bengaluru",
-      name: "RentCircle Forum Mall",
-      address: "Forum Mall, Kanakapura Rd, Bengaluru, Karnataka",
-    },
-    {
-      id: "mum-infinity",
-      city: "Mumbai",
-      name: "RentCircle Infiniti Mall",
-      address: "Infiniti Mall, Malad West, Mumbai, Maharashtra",
-    },
-    {
-      id: "del-vegas",
-      city: "New Delhi",
-      name: "RentCircle Vegas Mall",
-      address: "Vegas Mall, Dwarka, New Delhi",
-    },
-    {
-      id: "hyd-sarath",
-      city: "Hyderabad",
-      name: "RentCircle Sarath City",
-      address: "Sarath City Capital Mall, Gachibowli, Hyderabad",
-    },
-    {
-      id: "pune-amanora",
-      city: "Pune",
-      name: "RentCircle Amanora",
-      address: "Amanora Mall, Hadapsar, Pune, Maharashtra",
-    },
-    {
-      id: "blr-orion",
-      city: "Bengaluru",
-      name: "RentCircle Orion Mall",
-      address: "Orion Mall, Rajajinagar, Bengaluru",
-    },
-  ];
-
-  const [storeCity, setStoreCity] = useState("");
-  const sliderRef = useRef(null);
-
-  const visibleStores = useMemo(() => {
-    if (!storeCity) return stores;
-    return stores.filter((s) => s.city === storeCity);
-  }, [storeCity, stores]);
-
-  const scrollStores = (dir) => {
-    if (!sliderRef.current) return;
-    const amount = dir === "left" ? -260 : 260;
-    sliderRef.current.scrollBy({ left: amount, behavior: "smooth" });
-  };
 
   // --- quick category CTA handlers ----------------------
   const goToShop = (params) => {
@@ -106,8 +54,8 @@ const Home = () => {
             </h1>
             <p className="mt-4 text-sm md:text-base text-slate-600 max-w-xl">
               Rent premium outfits for weddings, festivals, date nights and
-              office parties. Women, men and traditional fits — all under one smart
-              wardrobe.
+              office parties. Women, men and traditional fits — all under one
+              smart wardrobe.
             </p>
 
             {/* Quick filters like NEWME */}
@@ -277,9 +225,9 @@ const Home = () => {
               Be yourself, rent the look.
             </h2>
             <p className="mt-3 text-sm md:text-base text-slate-600">
-              Build a rotating wardrobe instead of buying one-time outfits.
-              From easy kurta sets to sharp blazers, dress the way you feel
-              today — without committing for life.
+              Build a rotating wardrobe instead of buying one-time outfits. From
+              easy kurta sets to sharp blazers, dress the way you feel today —
+              without committing for life.
             </p>
             <button
               onClick={() => goToShop({})}
@@ -387,97 +335,13 @@ const Home = () => {
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {(traditionalPicks.length ? traditionalPicks : products.slice(0, 4)).map(
-              (p) => (
-                <ProductCard key={p.id} product={p} />
-              )
-            )}
+            {(traditionalPicks.length
+              ? traditionalPicks
+              : products.slice(0, 4)
+            ).map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
-        </div>
-      </section>
-
-      {/* FIND STORES + SLIDER (NEWME-style) */}
-      <section className="bg-slate-100 py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
-            <div>
-              <h2 className="text-xl md:text-2xl font-semibold text-slate-900">
-                Find a store near you
-              </h2>
-              <p className="mt-1 text-sm text-slate-600 max-w-md">
-                Try traditional outfits in person, get quick alterations and
-                pick up or drop your rentals at our partner stores.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 text-sm">
-              <select
-                value={storeCity}
-                onChange={(e) => setStoreCity(e.target.value)}
-                className="min-w-[160px] rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-700 focus:outline-none focus:border-slate-900"
-              >
-                <option value="">All cities</option>
-                <option value="Bengaluru">Bengaluru</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="New Delhi">New Delhi</option>
-                <option value="Hyderabad">Hyderabad</option>
-                <option value="Pune">Pune</option>
-              </select>
-              <button className="rounded-xl border border-slate-300 px-4 py-2 text-slate-700 hover:border-slate-900 hover:text-slate-900">
-                Use my location
-              </button>
-            </div>
-          </div>
-
-          {/* Slider */}
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => scrollStores("left")}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 h-9 w-9 rounded-full bg-white shadow-sm border border-slate-200 items-center justify-center text-lg text-slate-700 hover:bg-slate-50"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollStores("right")}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 h-9 w-9 rounded-full bg-white shadow-sm border border-slate-200 items-center justify-center text-lg text-slate-700 hover:bg-slate-50"
-            >
-              ›
-            </button>
-
-            <div
-              ref={sliderRef}
-              className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent"
-            >
-              {visibleStores.map((store) => (
-                <div
-                  key={store.id}
-                  className="min-w-[260px] max-w-[260px] flex-shrink-0 rounded-3xl bg-white shadow-sm border border-slate-200 overflow-hidden"
-                >
-                  <div className="h-24 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 flex items-end px-4 pb-3">
-                    <span className="text-xs uppercase tracking-[0.28em] text-slate-200">
-                      {store.city}
-                    </span>
-                  </div>
-                  <div className="p-4 space-y-2 text-sm">
-                    <p className="font-semibold text-slate-900">{store.name}</p>
-                    <p className="text-xs text-slate-600">{store.address}</p>
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
-                      <span>Everyday 11am – 9pm</span>
-                      <button className="text-slate-900 font-medium hover:underline">
-                        Navigate
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <p className="mt-3 text-[11px] text-slate-500">
-            More cities coming soon. You can always rent online even if there’s
-            no store near you yet.
-          </p>
         </div>
       </section>
 
@@ -509,7 +373,8 @@ const Home = () => {
                 </h3>
                 <p className="text-xs text-slate-600">
                   Quick reads from our in-house stylists, so you can focus on
-                  enjoying the event instead of stressing in front of the mirror.
+                  enjoying the event instead of stressing in front of the
+                  mirror.
                 </p>
                 <button className="mt-1 text-xs font-medium text-slate-900 hover:underline self-start">
                   Read more
